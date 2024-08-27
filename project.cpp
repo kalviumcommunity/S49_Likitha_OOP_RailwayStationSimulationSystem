@@ -3,17 +3,21 @@
 using namespace std;
 
 class Train {
-    private:
+private:
     int scheduleHour;
     int scheduleMinute;
 public:
     void setSchedule(int hour, int minute) {
-        scheduleHour = hour;
-        scheduleMinute = minute;
+        this->scheduleHour = hour;
+        this->scheduleMinute = minute;
     }
 
     void displaySchedule() {
         cout << "Train is scheduled at " << scheduleHour << ":" << scheduleMinute << endl;
+    }
+
+    Train* getSchedulePointer() {
+        return this;
     }
 };
 
@@ -22,11 +26,15 @@ private:
     string name;
 public:
     void setName(string n) {
-        name = n;
+        this->name = n;
     }
 
     void displayInfo() {
         cout << "Passenger Name: " << name << endl;
+    }
+
+    Passenger* getNamePointer() {
+        return this;
     }
 };
 
@@ -39,6 +47,12 @@ int main() {
 
     passenger.setName("Bob");
     passenger.displayInfo();
+
+    Train* trainPointer = myTrain.getSchedulePointer();
+    Passenger* passengerPointer = passenger.getNamePointer();
+
+    cout << "Memory address of Train object: " << trainPointer << endl;
+    cout << "Memory address of Passenger object: " << passengerPointer << endl;
 
     return 0;
 }
