@@ -40,19 +40,22 @@ public:
 
 int main() {
     Train myTrain;
-    Passenger passenger;
-
     myTrain.setSchedule(10, 30);
     myTrain.displaySchedule();
 
-    passenger.setName("Bob");
-    passenger.displayInfo();
+    Passenger passengers[3];
+
+    passengers[0].setName("Bob");
+    passengers[1].setName("Alice");
+    passengers[2].setName("Charlie");
+
+    for (int i = 0; i < 3; i++) {
+        passengers[i].displayInfo();
+    }
 
     Train* trainPointer = myTrain.getSchedulePointer();
-    Passenger* passengerPointer = passenger.getNamePointer();
 
     cout << "Memory address of Train object: " << trainPointer << endl;
-    cout << "Memory address of Passenger object: " << passengerPointer << endl;
 
     return 0;
 }
