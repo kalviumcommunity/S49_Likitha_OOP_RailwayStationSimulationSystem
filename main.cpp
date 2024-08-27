@@ -12,7 +12,7 @@ public:
     }
 
     void displaySchedule() {
-        cout << "Train scheduled at " << scheduleHour << ":" << scheduleMinute << endl;
+        cout << "Train is scheduled at" << scheduleHour << ":" << scheduleMinute << endl;
     }
 
 
@@ -39,7 +39,7 @@ int main() {
     myTrain.setSchedule(10, 30);
     myTrain.displaySchedule();
 
-    passenger.setName("Alice");
+    passenger.setName("Bob");
     passenger.displayInfo();
 
     return 0;
