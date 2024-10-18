@@ -2,80 +2,85 @@
 #include <string>
 using namespace std;
 
+// Train class
 class Train {
 private:
-    int scheduleHour;
+    int scheduleHour;   // Private members (not accessible directly)
     int scheduleMinute;
-    static int trainCount;  // Static variable to keep track of train instances
+
+protected:
+    string trainName;  // Protected member, accessible in derived classes
 
 public:
-    Train() {
-        trainCount++;  // Increment count when a new train is created
-    }
-
+    // Public setter method to set train schedule
     void setSchedule(int hour, int minute) {
-        this->scheduleHour = hour;
-        this->scheduleMinute = minute;
+        scheduleHour = hour;
+        scheduleMinute = minute;
     }
 
-    void displaySchedule() {
-        cout << "Train is scheduled at " << scheduleHour << ":" << scheduleMinute << endl;
+    // Public getter method to display train schedule
+    void getSchedule() {
+        cout << "Train Schedule: " << trainName << " " 
+             << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
     }
 
-    static int getTrainCount() {  // Static method to access the static variable
-        return trainCount;
+    // Public method to set the train name (protected member)
+    void setTrainName(string name) {
+        trainName = name;
     }
 };
 
-// Initialize static variable
-int Train::trainCount = 0;
-
+// Passenger class
 class Passenger {
 private:
-    string name;
-    static int passengerCount;  // Static variable to keep track of passenger instances
+    string name;  // Private member
+
+protected:
+    int passengerID;  // Protected member, accessible in derived classes
 
 public:
-    Passenger() {
-        passengerCount++;  // Increment count when a new passenger is created
+    // Public setter method to set passenger name
+    void setName(string passengerName) {
+        name = passengerName;
     }
 
-    void setName(string n) {
-        this->name = n;
+    // Public getter method to display passenger name
+    void getName() {
+        cout << "Passenger Name: " << name << " (ID: " << passengerID << ")" << endl;
     }
 
-    void displayInfo() {
-        cout << "Passenger Name: " << name << endl;
-    }
-
-    static int getPassengerCount() {  // Static method to access the static variable
-        return passengerCount;
+    // Public setter for protected passengerID
+    void setPassengerID(int id) {
+        passengerID = id;
     }
 };
 
-// Initialize static variable
-int Passenger::passengerCount = 0;
+// Derived class showing protected inheritance (optional to demonstrate inheritance and abstraction)
+class VIPPassenger : public Passenger {
+public:
+    void displayVIPStatus() {
+        cout << "VIP Passenger ID: " << passengerID << endl; // Accessing protected member from base class
+    }
+};
 
 int main() {
-    Train* myTrain = new Train;
-    myTrain->setSchedule(10, 30);
-    myTrain->displaySchedule();
+    // Create Train object
+    Train train1;
+    train1.setTrainName("Express");  // Setting train name (protected member)
+    train1.setSchedule(14, 30);      // Setting train schedule
+    train1.getSchedule();            // Displaying train schedule
 
-    Passenger* passengers = new Passenger[3];
+    // Create Passenger object
+    Passenger passenger1;
+    passenger1.setName("John Doe");  // Setting passenger name
+    passenger1.setPassengerID(1234); // Setting passenger ID (protected member via public method)
+    passenger1.getName();            // Displaying passenger details
 
-    passengers[0].setName("Bob");
-    passengers[1].setName("Alice");
-    passengers[2].setName("Charlie");
-
-    for (int i = 0; i < 3; i++) {
-        passengers[i].displayInfo();
-    }
-
-    cout << "Total number of trains: " << Train::getTrainCount() << endl;
-    cout << "Total number of passengers: " << Passenger::getPassengerCount() << endl;
-
-    delete myTrain;      
-    delete[] passengers;  
+    // Create VIPPassenger object (demonstrates protected inheritance)
+    VIPPassenger vipPassenger;
+    vipPassenger.setName("Jane Doe");
+    vipPassenger.setPassengerID(5678);
+    vipPassenger.displayVIPStatus(); // Displaying VIP status
 
     return 0;
 }
