@@ -11,9 +11,16 @@ protected:
     string trainName;
 
 public:
+    // Original setSchedule function with hour and minute parameters
     void setSchedule(int hour, int minute) {
         scheduleHour = hour;
         scheduleMinute = minute;
+    }
+
+    // Overloaded setSchedule function with only hour parameter
+    void setSchedule(int hour) {
+        scheduleHour = hour;
+        scheduleMinute = 0;  // Default minutes to 0 if only hour is provided
     }
 
     void getSchedule() {
@@ -64,16 +71,19 @@ public:
 int main() {
     Train train1;
     train1.setTrainName("Express");
-    train1.setSchedule(14, 30);
+    train1.setSchedule(14, 30);  // Calls setSchedule with hour and minute
     train1.getSchedule();
+
+    Train train2;
+    train2.setTrainName("FastTrack");
+    train2.setSchedule(12);  // Calls overloaded setSchedule with only hour
+    train2.getSchedule();
 
     LuxuryTrain luxuryTrain1;
     luxuryTrain1.setTrainName("Titan");
     luxuryTrain1.setSchedule(16, 45);
     luxuryTrain1.getSchedule();
     luxuryTrain1.displayLuxuryFeatures();
-
-   
 
     Passenger passenger1;
     passenger1.setName("John Doe");
