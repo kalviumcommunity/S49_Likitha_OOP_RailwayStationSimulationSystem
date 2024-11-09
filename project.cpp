@@ -2,70 +2,130 @@
 #include <string>
 using namespace std;
 
-// Abstract class with a pure virtual function
-class TrainInfo {
-public:
-    virtual void displayScheduleDetails() = 0;  // Pure virtual function
-};
-
-class Train : public TrainInfo {
+// Train class demonstrating Abstraction, Constructors, and Destructors
+class Train {
 private:
     int scheduleHour;
     int scheduleMinute;
-
-protected:
-    string trainName;
+    static int trainCount;
 
 public:
-    void setSchedule(int hour, int minute) {
-        scheduleHour = hour;
-        scheduleMinute = minute;
+    // Default Constructor
+    Train() {
+        scheduleHour = 0;
+        scheduleMinute = 0;
+        trainCount++;
+        cout << "Train object created. Train count: " << trainCount << endl;
     }
 
-    void setSchedule(int hour) {
+    // Parameterized Constructor
+    Train(int hour, int minute) {
         scheduleHour = hour;
-        scheduleMinute = 0;
+        scheduleMinute = minute;
+        trainCount++;
+        cout << "Train object created with schedule " << hour << ":" << minute << ". Train count: " << trainCount << endl;
+    }
+
+    // Destructor
+    ~Train() {
+        trainCount--;
+        cout << "Train object destroyed. Remaining trains: " << trainCount << endl;
+    }
+
+    void setSchedule(int hour, int minute) {
+        this->scheduleHour = hour;
+        this->scheduleMinute = minute;
     }
 
     void getSchedule() {
-        cout << "Train Schedule: " << trainName << " " 
-             << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
+        cout << "Train is scheduled at " << scheduleHour << ":" << scheduleMinute << endl;
     }
 
-    void setTrainName(string name) {
-        trainName = name;
-    }
-
-    // Override the pure virtual function from TrainInfo
-    void displayScheduleDetails() override {
-        cout << "Train Name: " << trainName << ", Scheduled Time: "
-             << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
-    }
-
-    virtual void showFeatures() {
-        cout << "Basic train features for " << trainName << "." << endl;
+    static int getTrainCount() {
+        return trainCount;
     }
 };
 
-class LuxuryTrain : public Train {
+// Initialize static variable
+int Train::trainCount = 0;
+
+// Passenger class demonstrating Abstraction, Constructors, and Destructors
+class Passenger {
+private:
+    string name;
+    static int passengerCount;
+
 public:
-    void showFeatures() override {
-        cout << trainName << " is a luxury train with premium features." << endl;
+    // Default Constructor
+    Passenger() {
+        name = "Unknown";
+        passengerCount++;
+        cout << "Passenger object created. Passenger count: " << passengerCount << endl;
+    }
+
+    // Parameterized Constructor
+    Passenger(string n) {
+        name = n;
+        passengerCount++;
+        cout << "Passenger object created with name " << name << ". Passenger count: " << passengerCount << endl;
+    }
+
+    // Destructor
+    ~Passenger() {
+        passengerCount--;
+        cout << "Passenger object destroyed. Remaining passengers: " << passengerCount << endl;
+    }
+
+    void setName(string n) {
+        this->name = n;
+    }
+
+    string getName() {
+        return name;
+    }
+
+    static int getPassengerCount() {
+        return passengerCount;
+    }
+
+    void displayInfo() {
+        cout << "Passenger Name: " << name << endl;
     }
 };
+
+// Initialize static variable
+int Passenger::passengerCount = 0;
 
 int main() {
-    Train train1;
-    train1.setTrainName("Express");
-    train1.setSchedule(14, 30);
-    train1.displayScheduleDetails();
-    train1.showFeatures();
+    // Using Default Constructor and setting schedule
+    Train* myTrain = new Train;
+    myTrain->setSchedule(10, 30);
+    myTrain->getSchedule();
 
-    LuxuryTrain luxuryTrain1;
-    luxuryTrain1.setTrainName("Titan");
-    luxuryTrain1.setSchedule(16, 45);
-    luxuryTrain1.displayScheduleDetails();
-    luxuryTrain1.showFeatures();
+    // Using Parameterized Constructor
+    Train* expressTrain = new Train(8, 45);
+
+    // Creating Passenger objects using both default and parameterized constructors
+    Passenger* passengers = new Passenger[3];
+    passengers[0].setName("Bob");
+    passengers[1].setName("Alice");
+    passengers[2].setName("Charlie");
+
+    // Displaying passenger names
+    for (int i = 0; i < 3; i++) {
+        cout << passengers[i].getName() << endl;
+    }
+
+    // Display total train count
+    cout << "Total number of trains: " << Train::getTrainCount() << endl;
+
+    // Display total passenger count
+    cout << "Total number of passengers: " << Passenger::getPassengerCount() << endl;
+
+    // Clean up memory
+    delete myTrain;
+    delete expressTrain;
+    delete[] passengers;
 
     return 0;
 }
