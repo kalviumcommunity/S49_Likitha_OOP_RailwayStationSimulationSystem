@@ -2,63 +2,64 @@
 #include <string>
 using namespace std;
 
-// Abstract class with a pure virtual function
-
-
-// The TrainInfo class is responsible solely for defining the interface for schedule-related operations.
+// Abstract class defining an interface for schedule-related operations.
+// This adheres to OCP by allowing new types of TrainInfo implementations without modifying this class.
 class TrainInfo {
 public:
-    virtual void displayScheduleDetails() = 0;  // Pure virtual function
+    virtual void displayScheduleDetails() = 0;  // Ensures flexibility for extended behavior.
 };
 
-// The Train class is responsible for handling train details such as name, schedule, and basic features.
+// Base Train class defines core train functionality.
+// It is open for extension (can be inherited) but closed for modification of its existing methods.
 class Train : public TrainInfo {
 private:
-    int scheduleHour;  // Stores the hour of the train's schedule
-    int scheduleMinute;  // Stores the minutes of the train's schedule
+    int scheduleHour;  // Encapsulates schedule details
+    int scheduleMinute;
 
 protected:
-    string trainName;  // Stores the train's name
+    string trainName;  // Allows derived classes to use trainName for extension.
 
 public:
-    // The setSchedule function is responsible for assigning schedule time.
+    // Allows setting the train's schedule. Does not need to be modified for additional train types.
     void setSchedule(int hour, int minute) {
         scheduleHour = hour;
         scheduleMinute = minute;
     }
 
-    // Overloaded function to set schedule with only hour; defaults minute to 0.
+    // Overloaded schedule setter ensures additional flexibility without altering the existing method.
     void setSchedule(int hour) {
         scheduleHour = hour;
         scheduleMinute = 0;
     }
 
-    // The getSchedule function is responsible for retrieving the schedule in a formatted string.
+    // Displays the schedule in a standard format. It is closed for modification.
     void getSchedule() {
         cout << "Train Schedule: " << trainName << " " 
              << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
     }
 
-    // The setTrainName function is responsible for assigning a name to the train.
+    // Sets the name of the train. Core functionality remains unchanged.
     void setTrainName(string name) {
         trainName = name;
     }
 
-    // The displayScheduleDetails function is overridden to meet the interface defined by TrainInfo.
+    // Implements the abstract function, ensuring adherence to the TrainInfo interface.
     void displayScheduleDetails() override {
         cout << "Train Name: " << trainName << ", Scheduled Time: "
              << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
     }
 
-    // The showFeatures function is responsible for providing basic features of the train.
+    // Provides a basic train feature. Open for overriding by derived classes for extended behavior.
     virtual void showFeatures() {
         cout << "Basic train features for " << trainName << "." << endl;
     }
 };
 
-// The LuxuryTrain class adds additional features and overrides functionality specific to luxury trains.
+// LuxuryTrain class extends the Train class to add specific features for luxury trains.
+// It adheres to OCP by extending the functionality without altering the base Train class.
 class LuxuryTrain : public Train {
 public:
+    // Overrides the showFeatures method to introduce additional behavior.
     void showFeatures() override {
         cout << trainName << " is a luxury train with premium features." << endl;
     }
