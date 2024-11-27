@@ -2,130 +2,64 @@
 #include <string>
 using namespace std;
 
-// Train class demonstrating Abstraction, Constructors, and Destructors
-class Train {
+// Abstract class with a pure virtual function
+
+
+// The TrainInfo class is responsible solely for defining the interface for schedule-related operations.
+class TrainInfo {
+public:
+    virtual void displayScheduleDetails() = 0;  // Pure virtual function
+};
+
+// The Train class is responsible for handling train details such as name, schedule, and basic features.
+class Train : public TrainInfo {
 private:
-    int scheduleHour;
-    int scheduleMinute;
-    static int trainCount;
+    int scheduleHour;  // Stores the hour of the train's schedule
+    int scheduleMinute;  // Stores the minutes of the train's schedule
+
+protected:
+    string trainName;  // Stores the train's name
 
 public:
-    // Default Constructor
-    Train() {
-        scheduleHour = 0;
-        scheduleMinute = 0;
-        trainCount++;
-        cout << "Train object created. Train count: " << trainCount << endl;
-    }
-
-    // Parameterized Constructor
-    Train(int hour, int minute) {
+    // The setSchedule function is responsible for assigning schedule time.
+    void setSchedule(int hour, int minute) {
         scheduleHour = hour;
         scheduleMinute = minute;
-        trainCount++;
-        cout << "Train object created with schedule " << hour << ":" << minute << ". Train count: " << trainCount << endl;
     }
 
-    // Destructor
-    ~Train() {
-        trainCount--;
-        cout << "Train object destroyed. Remaining trains: " << trainCount << endl;
+    // Overloaded function to set schedule with only hour; defaults minute to 0.
+    void setSchedule(int hour) {
+        scheduleHour = hour;
+        scheduleMinute = 0;
     }
 
-    void setSchedule(int hour, int minute) {
-        this->scheduleHour = hour;
-        this->scheduleMinute = minute;
-    }
-
+    // The getSchedule function is responsible for retrieving the schedule in a formatted string.
     void getSchedule() {
-        cout << "Train is scheduled at " << scheduleHour << ":" << scheduleMinute << endl;
+        cout << "Train Schedule: " << trainName << " " 
+             << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
     }
 
-    static int getTrainCount() {
-        return trainCount;
+    // The setTrainName function is responsible for assigning a name to the train.
+    void setTrainName(string name) {
+        trainName = name;
+    }
+
+    // The displayScheduleDetails function is overridden to meet the interface defined by TrainInfo.
+    void displayScheduleDetails() override {
+        cout << "Train Name: " << trainName << ", Scheduled Time: "
+             << scheduleHour << ":" << (scheduleMinute < 10 ? "0" : "") << scheduleMinute << endl;
+    }
+
+    // The showFeatures function is responsible for providing basic features of the train.
+    virtual void showFeatures() {
+        cout << "Basic train features for " << trainName << "." << endl;
     }
 };
 
-// Initialize static variable
-int Train::trainCount = 0;
-
-// Passenger class demonstrating Abstraction, Constructors, and Destructors
-class Passenger {
-private:
-    string name;
-    static int passengerCount;
-
+// The LuxuryTrain class adds additional features and overrides functionality specific to luxury trains.
+class LuxuryTrain : public Train {
 public:
-    // Default Constructor
-    Passenger() {
-        name = "Unknown";
-        passengerCount++;
-        cout << "Passenger object created. Passenger count: " << passengerCount << endl;
-    }
-
-    // Parameterized Constructor
-    Passenger(string n) {
-        name = n;
-        passengerCount++;
-        cout << "Passenger object created with name " << name << ". Passenger count: " << passengerCount << endl;
-    }
-
-    // Destructor
-    ~Passenger() {
-        passengerCount--;
-        cout << "Passenger object destroyed. Remaining passengers: " << passengerCount << endl;
-    }
-
-    void setName(string n) {
-        this->name = n;
-    }
-
-    string getName() {
-        return name;
-    }
-
-    static int getPassengerCount() {
-        return passengerCount;
-    }
-
-    void displayInfo() {
-        cout << "Passenger Name: " << name << endl;
+    void showFeatures() override {
+        cout << trainName << " is a luxury train with premium features." << endl;
     }
 };
-
-// Initialize static variable
-int Passenger::passengerCount = 0;
-
-int main() {
-    // Using Default Constructor and setting schedule
-    Train* myTrain = new Train;
-    myTrain->setSchedule(10, 30);
-    myTrain->getSchedule();
-
-    // Using Parameterized Constructor
-    Train* expressTrain = new Train(8, 45);
-
-    // Creating Passenger objects using both default and parameterized constructors
-    Passenger* passengers = new Passenger[3];
-    passengers[0].setName("Bob");
-    passengers[1].setName("Alice");
-    passengers[2].setName("Charlie");
-
-    // Displaying passenger names
-    for (int i = 0; i < 3; i++) {
-        cout << passengers[i].getName() << endl;
-    }
-
-    // Display total train count
-    cout << "Total number of trains: " << Train::getTrainCount() << endl;
-
-    // Display total passenger count
-    cout << "Total number of passengers: " << Passenger::getPassengerCount() << endl;
-
-    // Clean up memory
-    delete myTrain;
-    delete expressTrain;
-    delete[] passengers;
-
-    return 0;
-}
